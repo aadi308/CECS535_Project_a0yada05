@@ -5,7 +5,7 @@ try:
     connection = mysql.connector.connect(
         host='localhost',
         user='root',
-        password='password',  # Change this to your_password
+        password='aadi98114',  # Change this to your_password
         database='535Projecta0yada05'
     )
     cursor = connection.cursor()
@@ -70,21 +70,29 @@ def check_pending():
         if days <= 0:
             print("Number of days must be positive.")
             return
+        
+        cursor.execute('SELECT COUNT(*) FROM Users WHERE userId = %s', (user_id,))
+        if cursor.fetchone()[0] == 0:
+            print("User ID not found.")
+            return
+
         cursor.execute('SELECT Pending(%s, %s)', (user_id, days))
         result = cursor.fetchone()
         print(f"Pending tasks due in next {days} days: {result[0]}")
     except Error as e:
         print("Error in check_pending:", e)
     except ValueError:
-        print("Invalid input. Please enter numeric values.")
+        print("Invalid input.")
 
 
-# Sample test run - uncomment for testing
-create_user(10, "Aadi", "Yadav", "aadi@example.com")
-create_task(110, "Prepare Report", "2025-04-25", 1)
+
+# Sample test run please uncomment for testing
+# create_user(10, "Aadi", "Yadav", "a0yada05@louisville.com")
+# create_task(110, "Prepare Report", "2025-04-25", 1)
 read_users()
-check_pending()
 show_overdue_tasks()
+check_pending()
+
 
 cursor.close()
 connection.close()
